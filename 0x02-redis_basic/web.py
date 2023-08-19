@@ -18,6 +18,8 @@ def url_count(method: Callable) -> Callable:
         cached = redis_client.get(f'{url}')
         if cached:
             return cached.decode('utf-8')
+
+
         redis_client.setex(f'{url}, 10, {method(url)}')
         return method(*args, **kwargs)
     return wrapper
@@ -32,4 +34,3 @@ def get_page(url: str) -> str:
 
 if __name__ == "__main__":
     get_page('http://slowwly.robertomurray.co.uk')
-
